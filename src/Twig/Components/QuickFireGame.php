@@ -25,6 +25,8 @@ final class QuickFireGame
     public ?Position $position = null;
     public int $count = 0;
     public int $total = 0;
+    public string $player1 = 'Joueur 1';
+    public string $player2 = 'Joueur 2';
     public function __construct(private readonly GameInitializer $gameInitializer,
                                 private RequestStack $requestStack,
     private readonly PositionRepository $positionRepository,
@@ -46,6 +48,8 @@ final class QuickFireGame
         $this->total = $this->game->getTotal();
         $this->position = $this->game->drawNextPosition();
         $this->count = $session->get('count', 0) + 1;
+        $this->player1 = $session->get('player1', 'Joueur 1');
+        $this->player2 = $session->get('player2', 'Joueur 2');
         $this->saveGameToSession();
     }
 
@@ -64,6 +68,8 @@ final class QuickFireGame
 
         $this->total = $this->game->getTotal();
         $this->position = $this->game->drawNextPosition();
+        $this->player1 = $session->get('player1', 'Joueur 1');
+        $this->player2 = $session->get('player2', 'Joueur 2');
         if ($this->position === null) {
             $this->dispatchBrowserEvent('removeCountdown');
         } else {

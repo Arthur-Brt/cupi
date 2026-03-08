@@ -49,7 +49,8 @@
             {# Description #}
             {% if this.position.description %}
                 <div class="px-5 py-4 text-gray-600 text-sm leading-relaxed border-t border-gray-100">
-                    {{ this.position.description }}
+                    {{ this.position.description
+                        |replace({'{joueur1}': this.player1, '{joueur2}': this.player2, '{e1}': '', '{e2}': 'e', '{il1}': 'il', '{il2}': 'elle'}) }}
                 </div>
             {% endif %}
 

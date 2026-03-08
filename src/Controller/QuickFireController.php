@@ -26,6 +26,8 @@ final class QuickFireController extends AbstractController
         if ($request->isMethod('POST')) {
             $selectedIds = array_map('intval', $request->request->all('accessories'));
             $session->set('selected_accessories', $selectedIds);
+            $session->set('player1', trim($request->request->getString('player1')) ?: 'Joueur 1');
+            $session->set('player2', trim($request->request->getString('player2')) ?: 'Joueur 2');
             $session->remove('game');
             $session->remove('count');
 
@@ -38,6 +40,8 @@ final class QuickFireController extends AbstractController
         return $this->render('quick_fire/setup.html.twig', [
             'accessories' => $accessories,
             'selectedIds' => $selectedIds,
+            'player1'     => $session->get('player1', ''),
+            'player2'     => $session->get('player2', ''),
         ]);
     }
 
