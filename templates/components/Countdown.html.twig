@@ -1,0 +1,13 @@
+<div
+    {{ attributes
+        .add(stimulus_controller('counter'))
+    }}
+>
+    <button
+        class="border-4 border-primary rounded-full w-24 h-24 flex items-center justify-center text-2xl font-bold text-primary hover:cursor-pointer transition-all duration-200 ml-auto"
+        aria-label="Mettre le chronomètre en pause"
+        {{ stimulus_target('counter', 'countdown') }}>
+    </button>
+
+</div>
+

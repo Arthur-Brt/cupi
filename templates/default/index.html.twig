@@ -1,0 +1,10 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Hello DefaultController!{% endblock %}
+
+{% block body %}
+    <div id="heart"></div>
+<a class="heart w-200 aspect-[1/1] flex justify-center items-center mx-auto mt-10" href={{ path('app_quick_fire') }}>
+    <h2 class="text-6xl text-white translate-y-[-100%]">Lets's Play !</h2>
+</a>
+{% endblock %}

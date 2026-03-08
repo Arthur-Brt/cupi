@@ -1,0 +1,36 @@
+<div{{ attributes }}>
+    {% if this.position %}
+        <div class="bg-white rounded-lg shadow-lg overflow-hidden">
+            <div class="flex justify-between p-5 bg-black text-white">
+                <h2 class="text-4xl">{{ this.position.name }}</h2>
+                <p>Intensité : {{ this.position.intensity.value | trans }}</p>
+            </div>
+
+            <div class="bg-gray-900 p-5">
+                <img
+                    class="mx-auto rounded-lg aspect-3/4 object-cover max-h-150"
+                    src="{{ vich_uploader_asset(this.position, 'imageFile') }}"
+                    alt="{{ this.position.imageName }}"
+                />
+            </div>
+            {% if this.position.description %}
+                <div class="bg-black text-white p-5">
+                    <p>{{ this.position.description }}</p>
+                </div>
+            {% endif %}
+        </div>
+
+        <div class="flex mt-3">
+            <button
+                class="rounded ml-auto bg-secondary border-secondary border-solid border-2 hover:bg-white hover:text-secondary hover:cursor-pointer text-white py-2 px-3" data-action="live#action"
+                data-live-action-param="next">Suivant</button>
+        </div>
+    {% else %}
+        {# TODO : implement fin de partie #}
+        <p>Plus de positions disponibles.</p>
+        <button class="rounded ml-auto bg-tertiary border-tertiary border-solid border-2 hover:bg-white hover:text-tertiary hover:cursor-pointer text-white py-2 px-3" data-action="live#action" data-live-action-param="reset">Recommencer</button>
+
+    {% endif %}
+
+
+</div>

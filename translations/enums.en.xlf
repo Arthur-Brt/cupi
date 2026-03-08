@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xliff xmlns="urn:oasis:names:tc:xliff:document:2.0" version="2.0" srcLang="en" trgLang="en">
+  <file id="enums.en">
+    <unit id="oq4FpBU" name="intensity.eruption">
+      <segment>
+        <source>intensity.eruption</source>
+        <target>L'éruption</target>
+      </segment>
+    </unit>
+    <unit id="swn2YQ7" name="intensity.fire">
+      <segment>
+        <source>intensity.fire</source>
+        <target>Le feu</target>
+      </segment>
+    </unit>
+    <unit id="WxQcIwO" name="intensity.spark">
+      <segment>
+        <source>intensity.spark</source>
+        <target>L'étincelle</target>
+      </segment>
+    </unit>
+    <unit id="TBtjIb." name="intensity.desire">
+      <segment>
+        <source>intensity.desire</source>
+        <target>Le désir</target>
+      </segment>
+    </unit>
+    <unit id="QDrwQLp" name="intensity.warmup">
+      <segment>
+        <source>intensity.warmup</source>
+        <target>L'échauffement</target>
+      </segment>
+    </unit>
+  </file>
+</xliff>

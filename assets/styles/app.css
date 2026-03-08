@@ -1,3 +1,56 @@
+@import "tailwindcss";
+@theme {
+    --color-primary: #7f00ff;
+    --color-secondary: #ff00b2;
+    --color-tertiary: #ff0063;
+}
 body {
-    background-color: skyblue;
+    @apply bg-white;
+}
+img{
+    max-width:100%;
+    height:auto;
+}
+.card{
+    @apply text-primary rounded-lg mb-5;
+}
+#heart {
+    position: relative;
+    width: 100px;
+    height: 90px;
+    margin-top: 10px;
+}
+
+#heart::before, #heart::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    width: 52px;
+    height: 80px;
+    border-radius: 50px 50px 0 0;
+    background: red;
+}
+
+#heart::before {
+    left: 50px;
+    transform: rotate(-45deg);
+    transform-origin: 0 100%;
+}
+
+#heart::after {
+    left: 0;
+    transform: rotate(45deg);
+    transform-origin: 100% 100%;
+}
+.heart{
+    background:
+        radial-gradient(circle at 60% 65%, var( --color-secondary) 64%, #0000 65%) top left/50% 50%,
+        radial-gradient(circle at 40% 65%, var( --color-secondary) 64%, #0000 65%) top right/50% 50%,
+        conic-gradient(from -45deg at 50% 85.5%,var(--color-secondary) 90deg,#0000 0) bottom/100% 50%;
+    background-repeat: no-repeat;
+    transition: transform 0.1s ease, box-shadow 0.1s ease;
+}
+.heart:active {
+    transform: scale(0.92);
+    box-shadow: inset 0 0 15px rgba(0,0,0,0.3);
 }
