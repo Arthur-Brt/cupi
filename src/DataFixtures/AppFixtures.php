@@ -4,15 +4,32 @@ namespace App\DataFixtures;
 
 use App\Entity\Accessories;
 use App\Entity\Position;
+use App\Entity\User;
 use App\Enum\IntensityEnum;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Persistence\ObjectManager;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
+use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 
 class AppFixtures extends Fixture
 {
+    public function __construct(private readonly UserPasswordHasherInterface $hasher) {}
+
     public function load(ObjectManager $manager): void
     {
+        // ── Admins ───────────────────────────────────────────────────────────
+        $admins = [
+            ['admin@cupidon.fr', 'admin1234'],
+        ];
+
+        foreach ($admins as [$email, $plainPassword]) {
+            $user = new User();
+            $user->setEmail($email);
+            $user->setRoles(['ROLE_ADMIN']);
+            $user->setPassword($this->hasher->hashPassword($user, $plainPassword));
+            $manager->persist($user);
+        }
+
         // ── Accessoires ──────────────────────────────────────────────────────
         $accessoryData = [
             'Menottes',
