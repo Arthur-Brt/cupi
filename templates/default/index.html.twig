@@ -1,10 +1,93 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Hello DefaultController!{% endblock %}
+{% block title %}Cupidon — Pimentez votre soirée{% endblock %}
 
 {% block body %}
-    <div id="heart"></div>
-<a class="heart w-200 aspect-[1/1] flex justify-center items-center mx-auto mt-10" href={{ path('app_quick_fire') }}>
-    <h2 class="text-6xl text-white translate-y-[-100%]">Lets's Play !</h2>
-</a>
+<div class="min-h-screen bg-white">
+
+    {# Header #}
+    <header class="pt-10 pb-6 text-center">
+        <div class="inline-flex items-center gap-2 mb-2">
+            <span class="text-4xl font-bold text-primary">Cupidon</span>
+            <span class="text-3xl">♥</span>
+        </div>
+        <p class="text-gray-400 text-sm tracking-widest uppercase">Pimentez votre soirée</p>
+    </header>
+
+    {# Jeux #}
+    <main class="container mx-auto px-4 pb-16">
+        <h2 class="text-center text-gray-500 text-xs tracking-[0.2em] uppercase mb-10">Choisissez votre jeu</h2>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 max-w-4xl mx-auto">
+
+            {# Carte active : Rafale #}
+            <a href="{{ path('app_quick_fire_setup') }}" class="group relative bg-white rounded-2xl shadow-md hover:shadow-xl border border-gray-100 overflow-hidden transition-all duration-300 hover:-translate-y-1 flex flex-col">
+                <div class="h-1.5 w-full bg-gradient-to-r from-secondary to-tertiary"></div>
+                <div class="p-6 flex flex-col flex-1">
+                    <div class="flex items-start justify-between mb-4">
+                        <span class="text-5xl">🔥</span>
+                        <span class="text-xs font-semibold px-2.5 py-1 rounded-full bg-secondary/10 text-secondary">Disponible</span>
+                    </div>
+                    <h3 class="text-xl font-bold text-gray-800 mb-1">Rafale</h3>
+                    <p class="text-gray-500 text-sm flex-1 mb-5">Positions en rafale avec un compte à rebours. Du doux au torride, suivez le rythme.</p>
+                    <div class="flex items-center gap-3 text-xs text-gray-400 mb-5">
+                        <span class="flex items-center gap-1">⏱ ~15 min</span>
+                        <span class="flex items-center gap-1">🌡 5 niveaux</span>
+                    </div>
+                    <div class="mt-auto">
+                        <span class="block w-full text-center bg-gradient-to-r from-secondary to-tertiary text-white font-semibold py-2.5 rounded-xl group-hover:opacity-90 transition-opacity">
+                            Jouer
+                        </span>
+                    </div>
+                </div>
+            </a>
+
+            {# Carte bientôt #1 #}
+            <div class="relative bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden flex flex-col opacity-60">
+                <div class="h-1.5 w-full bg-gray-200"></div>
+                <div class="p-6 flex flex-col flex-1">
+                    <div class="flex items-start justify-between mb-4">
+                        <span class="text-5xl grayscale">🎲</span>
+                        <span class="text-xs font-semibold px-2.5 py-1 rounded-full bg-gray-100 text-gray-400">Bientôt</span>
+                    </div>
+                    <h3 class="text-xl font-bold text-gray-400 mb-1">Jeu mystère</h3>
+                    <p class="text-gray-400 text-sm flex-1 mb-5">Un nouveau jeu arrive bientôt...</p>
+                    <div class="flex items-center gap-3 text-xs text-gray-300 mb-5">
+                        <span>⏱ —</span>
+                        <span>🌡 —</span>
+                    </div>
+                    <div class="mt-auto">
+                        <span class="block w-full text-center bg-gray-200 text-gray-400 font-semibold py-2.5 rounded-xl cursor-not-allowed">
+                            Bientôt disponible
+                        </span>
+                    </div>
+                </div>
+            </div>
+
+            {# Carte bientôt #2 #}
+            <div class="relative bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden flex flex-col opacity-60">
+                <div class="h-1.5 w-full bg-gray-200"></div>
+                <div class="p-6 flex flex-col flex-1">
+                    <div class="flex items-start justify-between mb-4">
+                        <span class="text-5xl grayscale">💌</span>
+                        <span class="text-xs font-semibold px-2.5 py-1 rounded-full bg-gray-100 text-gray-400">Bientôt</span>
+                    </div>
+                    <h3 class="text-xl font-bold text-gray-400 mb-1">Jeu mystère</h3>
+                    <p class="text-gray-400 text-sm flex-1 mb-5">Un nouveau jeu arrive bientôt...</p>
+                    <div class="flex items-center gap-3 text-xs text-gray-300 mb-5">
+                        <span>⏱ —</span>
+                        <span>🌡 —</span>
+                    </div>
+                    <div class="mt-auto">
+                        <span class="block w-full text-center bg-gray-200 text-gray-400 font-semibold py-2.5 rounded-xl cursor-not-allowed">
+                            Bientôt disponible
+                        </span>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </main>
+
+</div>
 {% endblock %}

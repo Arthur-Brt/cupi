@@ -1,36 +1,84 @@
 <div{{ attributes }}>
+    {% set intensityColors = {
+        'warmup':   'bg-green-100 text-green-700',
+        'desire':   'bg-yellow-100 text-yellow-700',
+        'spark':    'bg-orange-100 text-orange-700',
+        'fire':     'bg-red-100 text-red-700',
+        'eruption': 'bg-purple-100 text-primary',
+    } %}
+
     {% if this.position %}
-        <div class="bg-white rounded-lg shadow-lg overflow-hidden">
-            <div class="flex justify-between p-5 bg-black text-white">
-                <h2 class="text-4xl">{{ this.position.name }}</h2>
-                <p>Intensité : {{ this.position.intensity.value | trans }}</p>
+
+        {# Barre de progression #}
+        {% set progress = this.total > 0 ? (this.count / this.total * 100) : 0 %}
+        <div class="mb-5">
+            <div class="flex justify-between text-xs text-gray-400 mb-1.5">
+                <span>Progression</span>
+                <span>{{ this.count }} / {{ this.total }}</span>
+            </div>
+            <div class="h-1.5 bg-gray-200 rounded-full overflow-hidden">
+                <div
+                    class="h-full bg-gradient-to-r from-secondary to-tertiary rounded-full transition-all duration-500"
+                    style="width: {{ progress }}%"
+                ></div>
+            </div>
+        </div>
+
+        {# Carte position #}
+        <div class="bg-white rounded-2xl shadow-md overflow-hidden">
+
+            {# Image avec overlay #}
+            <div class="relative">
+                <img
+                    class="w-full aspect-3/4 object-cover max-h-[60vh]"
+                    src="{{ vich_uploader_asset(this.position, 'imageFile') }}"
+                    alt="{{ this.position.name }}"
+                />
+                {# Gradient bas #}
+                <div class="absolute inset-x-0 bottom-0 h-28 bg-gradient-to-t from-black/70 to-transparent"></div>
+                {# Nom + badge intensité #}
+                <div class="absolute bottom-0 inset-x-0 p-4 flex items-end justify-between gap-3">
+                    <h2 class="text-2xl font-bold text-white drop-shadow leading-tight">{{ this.position.name }}</h2>
+                    {% set intensityClass = intensityColors[this.position.intensity.value] ?? 'bg-gray-100 text-gray-700' %}
+                    <span class="shrink-0 text-xs font-semibold px-2.5 py-1 rounded-full {{ intensityClass }}">
+                        {{ this.position.intensity.value | trans }}
+                    </span>
+                </div>
             </div>
 
-            <div class="bg-gray-900 p-5">
-                <img
-                    class="mx-auto rounded-lg aspect-3/4 object-cover max-h-150"
-                    src="{{ vich_uploader_asset(this.position, 'imageFile') }}"
-                    alt="{{ this.position.imageName }}"
-                />
-            </div>
+            {# Description #}
             {% if this.position.description %}
-                <div class="bg-black text-white p-5">
-                    <p>{{ this.position.description }}</p>
+                <div class="px-5 py-4 text-gray-600 text-sm leading-relaxed border-t border-gray-100">
+                    {{ this.position.description }}
                 </div>
             {% endif %}
+
         </div>
 
-        <div class="flex mt-3">
+        {# Bouton Suivant #}
+        <div class="mt-4">
             <button
-                class="rounded ml-auto bg-secondary border-secondary border-solid border-2 hover:bg-white hover:text-secondary hover:cursor-pointer text-white py-2 px-3" data-action="live#action"
-                data-live-action-param="next">Suivant</button>
+                class="w-full bg-gradient-to-r from-secondary to-tertiary text-white font-semibold py-3.5 rounded-xl hover:opacity-90 hover:cursor-pointer transition-opacity"
+                data-action="live#action"
+                data-live-action-param="next">
+                Suivant →
+            </button>
         </div>
+
     {% else %}
-        {# TODO : implement fin de partie #}
-        <p>Plus de positions disponibles.</p>
-        <button class="rounded ml-auto bg-tertiary border-tertiary border-solid border-2 hover:bg-white hover:text-tertiary hover:cursor-pointer text-white py-2 px-3" data-action="live#action" data-live-action-param="reset">Recommencer</button>
+
+        {# Écran de fin #}
+        <div class="text-center py-20">
+            <div class="text-6xl mb-4">🎉</div>
+            <h2 class="text-2xl font-bold text-gray-800 mb-2">Bravo !</h2>
+            <p class="text-gray-500 mb-8">Vous avez terminé toutes les positions.</p>
+            <button
+                class="bg-gradient-to-r from-secondary to-tertiary text-white font-semibold py-3 px-8 rounded-xl hover:opacity-90 hover:cursor-pointer transition-opacity"
+                data-action="live#action"
+                data-live-action-param="reset">
+                Rejouer 🔄
+            </button>
+        </div>
 
     {% endif %}
-
-
 </div>

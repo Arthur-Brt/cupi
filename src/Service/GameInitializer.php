@@ -16,12 +16,13 @@ class GameInitializer
     {
     }
 
-    public function quickFireGameInitialize(): Game
+    public function quickFireGameInitialize(array $selectedAccessoryIds = []): Game
     {
         $game = new Game($this->positionRepository, $this->accessoriesRepository);
 
-        //TODO créer un form pour selectionner les accesoires
-        $selectedAccessories = [];
+        $selectedAccessories = $selectedAccessoryIds
+            ? $this->accessoriesRepository->findBy(['id' => $selectedAccessoryIds])
+            : [];
         $game->setSelectedAccessories($selectedAccessories);
         $game->setIntensityQuota([
             IntensityEnum::WARMUP->value => 2,

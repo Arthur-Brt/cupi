@@ -24,6 +24,7 @@ final class QuickFireGame
     public Game $game;
     public ?Position $position = null;
     public int $count = 0;
+    public int $total = 0;
     public function __construct(private readonly GameInitializer $gameInitializer,
                                 private RequestStack $requestStack,
     private readonly PositionRepository $positionRepository,
@@ -38,13 +39,13 @@ final class QuickFireGame
         if ($gameData) {
             $this->game = Game::fromArray($gameData, $this->positionRepository, $this->accessoriesRepository);
         } else {
-            $this->game = $this->gameInitializer->quickFireGameInitialize();
-            $session->set('game', $this->game->toArray());
+            $selectedIds = $session->get('selected_accessories', []);
+            $this->game = $this->gameInitializer->quickFireGameInitialize($selectedIds);
         }
 
+        $this->total = $this->game->getTotal();
         $this->position = $this->game->drawNextPosition();
-        $storedCount = $session->get('count', 0);
-        $this->count = $storedCount;
+        $this->count = $session->get('count', 0) + 1;
         $this->saveGameToSession();
     }
 
@@ -61,16 +62,15 @@ final class QuickFireGame
             $session->set('game', $this->game->toArray());
         }
 
+        $this->total = $this->game->getTotal();
         $this->position = $this->game->drawNextPosition();
-        if($this->position === null){
+        if ($this->position === null) {
             $this->dispatchBrowserEvent('removeCountdown');
-        }else{
-            $this->dispatchBrowserEvent('countdownUpdate');
+        } else {
+            $this->count = $session->get('count', 0) + 1;
+            $this->dispatchBrowserEvent('countdownUpdate', ['duration' => $this->position->getEffectiveDuration()]);
         }
 
-
-
-        // sauvegarder l'état modifié du jeu en session
         $this->saveGameToSession();
     }
 
@@ -78,13 +78,15 @@ final class QuickFireGame
     public function reset(): void
     {
         $session = $this->requestStack->getCurrentRequest()->getSession();
-        $this->game = $this->gameInitializer->quickFireGameInitialize();
-        $session->set('game', $this->game->toArray());
+        $selectedIds = $session->get('selected_accessories', []);
+        $this->game = $this->gameInitializer->quickFireGameInitialize($selectedIds);
+        $this->total = $this->game->getTotal();
         $this->position = $this->game->drawNextPosition();
-        if($this->position === null){
+        $this->count = 1;
+        if ($this->position === null) {
             $this->dispatchBrowserEvent('removeCountdown');
-        }else{
-            $this->dispatchBrowserEvent('countdownUpdate');
+        } else {
+            $this->dispatchBrowserEvent('countdownUpdate', ['duration' => $this->position->getEffectiveDuration()]);
         }
         $this->saveGameToSession();
     }
@@ -93,8 +95,7 @@ final class QuickFireGame
     {
         $session = $this->requestStack->getCurrentRequest()->getSession();
         $session->set('game', $this->game->toArray());
-        //le countdown doit etre reinitialiser
-
+        $session->set('count', $this->count);
     }
 
     #[LiveListener('countdownASEnded')]

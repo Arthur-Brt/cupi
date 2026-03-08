@@ -12,6 +12,7 @@ use EasyCorp\Bundle\EasyAdminBundle\Field\ChoiceField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\Field;
 use EasyCorp\Bundle\EasyAdminBundle\Field\IdField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\ImageField;
+use EasyCorp\Bundle\EasyAdminBundle\Field\IntegerField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextareaField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextEditorField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextField;
@@ -55,11 +56,14 @@ class PositionCrudController extends AbstractCrudController
             ->onlyOnIndex();
         $accessories = AssociationField::new('accessories');
         $intensity = ChoiceField::new('intensity');
+        $duration = IntegerField::new('duration', 'Durée (secondes)')
+            ->setHelp('Laisser vide pour utiliser la durée par défaut (60s)')
+            ->setRequired(false);
 
         return match ($pageName) {
-                Crud::PAGE_INDEX => [$name, $imageDisplay, $intensity],
-                Crud::PAGE_DETAIL => [$name, $imageDisplay, $intensity],
-                Crud::PAGE_NEW, Crud::PAGE_EDIT => [$name, $description, $imageFile, $accessories, $intensity],
+                Crud::PAGE_INDEX => [$name, $imageDisplay, $intensity, $duration],
+                Crud::PAGE_DETAIL => [$name, $imageDisplay, $intensity, $duration],
+                Crud::PAGE_NEW, Crud::PAGE_EDIT => [$name, $description, $imageFile, $accessories, $intensity, $duration],
         };
     }
 //    public function persistEntity(EntityManagerInterface $entityManager, $entityInstance): void

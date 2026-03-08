@@ -46,6 +46,9 @@ class Position
     #[ORM\Column(nullable: true)]
     private ?\DateTimeImmutable $updatedAt = null;
 
+    #[ORM\Column(nullable: true)]
+    private ?int $duration = null;
+
 
     public function __construct()
     {
@@ -148,5 +151,22 @@ class Position
     public function setUpdatedAt(?\DateTimeImmutable $updatedAt): static
     {
         $this->updatedAt = $updatedAt;
+    }
+
+    public function getDuration(): ?int
+    {
+        return $this->duration;
+    }
+
+    public function setDuration(?int $duration): static
+    {
+        $this->duration = $duration;
+
+        return $this;
+    }
+
+    public function getEffectiveDuration(): int
+    {
+        return $this->duration ?? 60;
     }
 }

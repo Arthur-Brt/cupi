@@ -1,15 +1,25 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Hello QuickFireController!{% endblock %}
+{% block title %}Rafale — Cupidon{% endblock %}
 
 {% block body %}
+<div class="min-h-screen bg-gray-50 flex flex-col">
 
+    {# Header fixe #}
+    <header class="sticky top-0 z-10 bg-white border-b border-gray-100 shadow-sm">
+        <div class="container mx-auto px-4 py-3 flex items-center gap-4">
+            <a href="{{ path('homepage') }}" class="text-sm text-gray-400 hover:text-primary transition-colors whitespace-nowrap">
+                ← Accueil
+            </a>
+            <span class="flex-1 text-center font-bold text-gray-800">🔥 Rafale</span>
+            <twig:Countdown />
+        </div>
+    </header>
 
-<div class="container mx-auto">
-    <twig:Countdown
-    />
-    <div class="max-w-200 mx-auto">
+    {# Contenu du jeu #}
+    <main class="flex-1 container mx-auto px-4 py-6 max-w-lg">
         <twig:QuickFireGame />
-    </div>
+    </main>
+
 </div>
 {% endblock %}

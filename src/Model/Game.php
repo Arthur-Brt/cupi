@@ -19,6 +19,8 @@ class Game
     /** @var array<IntensityEnum, int> */
     private array $intensityQuota = [];
 
+    private int $total = 0;
+
     /** PositionRepository et AccessoriesRepository ne sont pas sérialisables */
     private ?PositionRepository $positionRepository = null;
     private ?AccessoriesRepository $accessoriesRepository = null;
@@ -60,6 +62,13 @@ class Game
                 $ids = array_slice($ids, 0, $this->intensityQuota[$intensity]);
             }
         }
+
+        $this->total = array_sum(array_map('count', $this->positionIdsByIntensity));
+    }
+
+    public function getTotal(): int
+    {
+        return $this->total;
     }
 
     public function drawNextPosition(): ?Position
@@ -92,6 +101,7 @@ class Game
             'selectedAccessoryIds' => $this->selectedAccessoryIds,
             'positionIdsByIntensity' => $formattedPositions,
             'intensityQuota' => $formattedQuota,
+            'total' => $this->total,
         ];
     }
 
@@ -111,6 +121,8 @@ class Game
         foreach ($data['positionIdsByIntensity'] ?? [] as $key => $ids) {
             $game->positionIdsByIntensity[IntensityEnum::from($key)->value] = $ids;
         }
+
+        $game->total = $data['total'] ?? 0;
 
         return $game;
     }

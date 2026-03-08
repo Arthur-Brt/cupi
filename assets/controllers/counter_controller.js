@@ -7,8 +7,8 @@ export default class extends Controller {
     async initialize() {
         this.component = await getComponent(this.element);
 
-        window.addEventListener('countdownUpdate', () => {
-            this.startCountdown();
+        window.addEventListener('countdownUpdate', (event) => {
+            this.startCountdown(event.detail?.duration ?? 60);
         });
         window.addEventListener('removeCountdown', () =>{
             this.removeCountdown();
@@ -21,19 +21,18 @@ export default class extends Controller {
     }
 
     connect() {
-        this.startCountdown(); // lancer au chargement
+        this.startCountdown(60); // lancer au chargement avec durée par défaut
 
     }
 
-    startCountdown() {
+    startCountdown(duration = 60) {
         // Si un timer existe déjà → on le stoppe
         if (this.timerInterval) {
             clearInterval(this.timerInterval);
         }
         this.countdownTarget.classList.remove('hidden');
 
-        // 60 secondes
-        this.remainingSeconds = 60;
+        this.remainingSeconds = duration;
         this.updateDisplay();
 
         this.resumeCountdown();
