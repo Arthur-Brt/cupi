@@ -1,0 +1,11 @@
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+
+    # Si la ressource demandée existe déjà dans /public, on la sert directement
+    RewriteCond %{REQUEST_URI} ^/(.*)$
+    RewriteCond %{DOCUMENT_ROOT}/public/%1 -f
+    RewriteRule ^(.*)$ public/$1 [L]
+
+    # Sinon, tout passe par le front controller de public/
+    RewriteRule ^(.*)$ public/index.php [L]
+</IfModule>
