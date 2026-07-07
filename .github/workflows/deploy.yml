@@ -9,21 +9,46 @@ on:
 jobs:
   deploy:
     runs-on: ubuntu-latest
-    environment: production
+    env:
+      APP_ENV: prod
+      APP_DEBUG: 0
+      # Valeurs factices : suffisantes pour compiler le container Symfony,
+      # aucune connexion DB réelle n'est nécessaire pour tailwind:build / asset-map:compile
+      APP_SECRET: build_only_dummy_secret
+      DATABASE_URL: "mysql://user:pass@127.0.0.1:3306/db?serverVersion=8.0&charset=utf8mb4"
     steps:
-      - name: Deploy via SSH
-        uses: appleboy/ssh-action@v1.2.0
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup PHP 8.4
+        uses: shivammathur/setup-php@v2
         with:
-          host: ${{ secrets.DEPLOY_HOST }}
-          username: ${{ secrets.DEPLOY_USER }}
-          key: ${{ secrets.DEPLOY_SSH_KEY }}
-          port: ${{ secrets.DEPLOY_PORT }}
-          script: |
-            set -e
-            cd ${{ secrets.DEPLOY_PATH }}
-            git pull
-            php8.4 /usr/bin/composer2 install --no-dev --optimize-autoloader
-            php8.4 ./bin/console doctrine:schema:update --force
-            php8.4 ./bin/console tailwind:build --minify
-            php8.4 ./bin/console asset-map:compile
-            php8.4 ./bin/console cache:clear
+          php-version: '8.4'
+          tools: composer:v2
+          coverage: none
+
+      - name: Install dependencies
+        run: composer install --no-dev --optimize-autoloader --no-interaction
+
+      - name: Build Tailwind CSS
+        run: php bin/console tailwind:build --minify
+
+      - name: Compile assets
+        run: php bin/console asset-map:compile
+
+      - name: Deploy via FTP
+        uses: SamKirkland/FTP-Deploy-Action@v4.3.5
+        with:
+          server: ${{ secrets.FTP_HOST }}
+          username: ${{ secrets.FTP_USERNAME }}
+          password: ${{ secrets.FTP_PASSWORD }}
+          protocol: ftps
+          local-dir: ./
+          server-dir: ${{ secrets.FTP_REMOTE_PATH }}/
+          exclude: |
+            **/.git*
+            **/.git*/**
+            **/.github/**
+            **/tests/**
+            **/var/**
+            **/node_modules/**
