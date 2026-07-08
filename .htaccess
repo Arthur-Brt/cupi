@@ -3,8 +3,11 @@
 
     # Fichiers statiques (assets compilés, images, médias, bundles) : servis directement depuis /public
     # (pas de test -f : les tests d'existence de fichier dans RewriteCond ne sont pas fiables sur l'hébergement mutualisé OVH)
+    # La condition !^/public/ évite que cette même règle soit réappliquée en boucle sur le chemin déjà réécrit
+    RewriteCond %{REQUEST_URI} !^/public/
     RewriteRule ^((assets|images|media|bundles)/.*)$ public/$1 [L]
 
     # Sinon, tout passe par le front controller de public/
+    RewriteCond %{REQUEST_URI} !^/public/
     RewriteRule ^(.*)$ public/index.php [L]
 </IfModule>
