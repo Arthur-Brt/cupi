@@ -59,10 +59,12 @@ class PositionCrudController extends AbstractCrudController
         $duration = IntegerField::new('duration', 'Durée (secondes)')
             ->setHelp('Laisser vide pour utiliser la durée par défaut (60s)')
             ->setRequired(false);
+        $createdBy = TextField::new('createdBy', 'Créé par')->onlyOnDetail();
+        $updatedBy = TextField::new('updatedBy', 'Modifié par')->onlyOnDetail();
 
         return match ($pageName) {
                 Crud::PAGE_INDEX => [$name, $imageDisplay, $intensity, $duration],
-                Crud::PAGE_DETAIL => [$name, $imageDisplay, $intensity, $duration],
+                Crud::PAGE_DETAIL => [$name, $imageDisplay, $intensity, $duration, $createdBy, $updatedBy],
                 Crud::PAGE_NEW, Crud::PAGE_EDIT => [$name, $description, $imageFile, $accessories, $intensity, $duration],
         };
     }

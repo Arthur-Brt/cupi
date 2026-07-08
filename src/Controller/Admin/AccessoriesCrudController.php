@@ -49,10 +49,12 @@ class AccessoriesCrudController extends AbstractCrudController
             ->setBasePath('/uploads/accessories')
             ->setLabel('Image')
             ->onlyOnIndex();
+        $createdBy = TextField::new('createdBy', 'Créé par')->onlyOnDetail();
+        $updatedBy = TextField::new('updatedBy', 'Modifié par')->onlyOnDetail();
 
         return match ($pageName) {
             Crud::PAGE_INDEX => [$name, $imageDisplay],
-            Crud::PAGE_DETAIL => [$name, $imageDisplay],
+            Crud::PAGE_DETAIL => [$name, $imageDisplay, $createdBy, $updatedBy],
             Crud::PAGE_NEW, Crud::PAGE_EDIT => [$name, $imageUpload],
             default => [],
         };
