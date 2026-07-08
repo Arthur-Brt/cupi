@@ -2,8 +2,9 @@
     RewriteEngine On
 
     # Si la ressource demandée existe déjà dans /public, on la sert directement
+    # (chemin relatif au dossier du .htaccess : DOCUMENT_ROOT n'est pas fiable sur OVH mutualisé)
     RewriteCond %{REQUEST_URI} ^/(.*)$
-    RewriteCond %{DOCUMENT_ROOT}/public/%1 -f
+    RewriteCond public/%1 -f
     RewriteRule ^(.*)$ public/$1 [L]
 
     # Sinon, tout passe par le front controller de public/
