@@ -1,11 +1,9 @@
 <IfModule mod_rewrite.c>
     RewriteEngine On
 
-    # Si la ressource demandée existe déjà dans /public, on la sert directement
-    # (chemin relatif au dossier du .htaccess : DOCUMENT_ROOT n'est pas fiable sur OVH mutualisé)
-    RewriteCond %{REQUEST_URI} ^/(.*)$
-    RewriteCond public/%1 -f
-    RewriteRule ^(.*)$ public/$1 [L]
+    # Fichiers statiques (assets compilés, images, médias, bundles) : servis directement depuis /public
+    # (pas de test -f : les tests d'existence de fichier dans RewriteCond ne sont pas fiables sur l'hébergement mutualisé OVH)
+    RewriteRule ^((assets|images|media|bundles)/.*)$ public/$1 [L]
 
     # Sinon, tout passe par le front controller de public/
     RewriteRule ^(.*)$ public/index.php [L]
