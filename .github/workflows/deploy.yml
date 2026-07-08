@@ -50,5 +50,6 @@ jobs:
             **/.git*/**
             **/.github/**
             **/tests/**
-            **/var/**
+            **/var/log/**
+            **/var/tailwind/**
             **/node_modules/**
