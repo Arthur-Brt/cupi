@@ -1,0 +1,84 @@
+/*
+ * Habillage EasyAdmin pour reprendre l'identité visuelle du site public
+ * (dégradé rose/violet, coins arrondis, ombres douces).
+ * On ne fait que surcharger les variables CSS du thème EasyAdmin :
+ * vendor/easycorp/easyadmin-bundle/assets/css/easyadmin-theme/variables-theme.css
+ */
+
+:root {
+    --color-primary: #ff00b2;
+    --color-primary-rgb: 255, 0, 178;
+    --link-color: #ff00b2;
+    --link-hover-color: #7f00ff;
+
+    --border-radius: 10px;
+    --border-radius-lg: 16px;
+    --border-radius-sm: 6px;
+
+    --sidebar-menu-active-item-color: #ff00b2;
+    --sidebar-menu-badge-active-bg: #7f00ff;
+    --table-thead-sorted-marker-color: #ff00b2;
+    --pagination-active-bg: #ff00b2;
+    --dropdown-settings-active-item-color: #ff00b2;
+    --user-menu-impersonated-link-color: #ff00b2;
+
+    /* valeur unie : sert de fallback partout où EasyAdmin l'utilise en background-color (n'accepte pas de dégradé) */
+    --button-primary-bg: #ff00b2;
+
+    --page-login-bg: #ffffff;
+    --page-login-form-bg: #ffffff;
+    --page-login-form-control-button-bg: #ff00b2;
+}
+
+.ea-dark-scheme {
+    --color-primary: #ff5cc8;
+    --link-color: #ff5cc8;
+    --link-hover-color: #b47bff;
+
+    --sidebar-menu-active-item-color: #1a0b16;
+    --sidebar-menu-active-item-bg: #ff5cc8;
+    --pagination-active-bg: #ff5cc8;
+
+    --button-primary-bg: #ff5cc8;
+    --page-login-form-control-button-bg: #ff5cc8;
+}
+
+/* Boutons "primary" en dégradé, comme les CTA du site public */
+/* (background-color ne supporte pas les dégradés : on force "background" avec la même spécificité que le thème EasyAdmin) */
+.btn-primary,
+.btn-primary:not(:disabled):not(.disabled):not(.btn-link):not(.btn-danger):hover,
+.btn-primary:not(:disabled):not(.disabled):not(.btn-link):not(.btn-danger):focus,
+.btn-primary:not(:disabled):not(.disabled):not(.btn-link):not(.btn-danger):active,
+.btn-primary:not(:disabled):not(.disabled):not(.btn-link):not(.btn-danger):active:focus {
+    background: linear-gradient(90deg, #ff00b2, #ff0063);
+}
+.ea-dark-scheme .btn-primary,
+.ea-dark-scheme .btn-primary:not(:disabled):not(.disabled):not(.btn-link):not(.btn-danger):hover,
+.ea-dark-scheme .btn-primary:not(:disabled):not(.disabled):not(.btn-link):not(.btn-danger):focus,
+.ea-dark-scheme .btn-primary:not(:disabled):not(.disabled):not(.btn-link):not(.btn-danger):active,
+.ea-dark-scheme .btn-primary:not(:disabled):not(.disabled):not(.btn-link):not(.btn-danger):active:focus {
+    background: linear-gradient(90deg, #ff5cc8, #ff6b8b);
+}
+
+/* Panneaux de contenu et cartes : coins plus arrondis, ombre plus douce */
+.content-panel,
+.form-container,
+.main-header,
+.card {
+    border-radius: var(--border-radius-lg) !important;
+    box-shadow: var(--shadow-md);
+}
+
+/* Logo / titre du dashboard */
+.logo-custom,
+.responsive-logo {
+    font-weight: 700;
+    background: linear-gradient(90deg, #7f00ff, #ff00b2);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+}
+.logo-custom .cupidon-heart {
+    background: none;
+    color: #ff0063;
+}

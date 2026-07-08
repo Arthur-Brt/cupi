@@ -154,6 +154,8 @@ class Position
     public function setUpdatedAt(?\DateTimeImmutable $updatedAt): static
     {
         $this->updatedAt = $updatedAt;
+
+        return $this;
     }
 
     public function getDuration(): ?int
