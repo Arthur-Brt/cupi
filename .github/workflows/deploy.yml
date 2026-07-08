@@ -45,6 +45,7 @@ jobs:
           protocol: ftp
           local-dir: ./
           server-dir: ${{ secrets.FTP_REMOTE_PATH }}/
+          state-name: .ftp-deploy-sync-state-v2.json
           exclude: |
             **/.git*
             **/.git*/**
