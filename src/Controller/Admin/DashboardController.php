@@ -4,6 +4,7 @@ namespace App\Controller\Admin;
 
 use App\Entity\Accessories;
 use App\Entity\Position;
+use App\Entity\User;
 use EasyCorp\Bundle\EasyAdminBundle\Attribute\AdminDashboard;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Assets;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Dashboard;
@@ -48,7 +49,8 @@ class DashboardController extends AbstractDashboardController
     public function configureAssets(): Assets
     {
         return Assets::new()
-            ->addCssFile('styles/admin.css');
+            ->addCssFile('styles/admin.css')
+            ->addAssetMapperEntry('admin');
     }
 
     public function configureMenuItems(): iterable
@@ -56,5 +58,6 @@ class DashboardController extends AbstractDashboardController
         yield MenuItem::linkToDashboard('Dashboard', 'fa fa-home');
         yield MenuItem::linkToCrud('Accessoires', 'fas fa-list', Accessories::class);
         yield MenuItem::linkToCrud('Positions', 'fas fa-list', Position::class);
+        yield MenuItem::linkToCrud('Administrateurs', 'fas fa-user-shield', User::class);
     }
 }

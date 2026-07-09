@@ -2,6 +2,7 @@
 
 namespace App\Entity;
 
+use App\Enum\GenderCombinationEnum;
 use App\Enum\IntensityEnum;
 use App\Repository\PositionRepository;
 use Doctrine\Common\Collections\ArrayCollection;
@@ -51,6 +52,9 @@ class Position
 
     #[ORM\Column(nullable: true)]
     private ?int $duration = null;
+
+    #[ORM\Column(enumType: GenderCombinationEnum::class)]
+    private GenderCombinationEnum $genderCombination = GenderCombinationEnum::ANY;
 
 
     public function __construct()
@@ -173,5 +177,17 @@ class Position
     public function getEffectiveDuration(): int
     {
         return $this->duration ?? 60;
+    }
+
+    public function getGenderCombination(): GenderCombinationEnum
+    {
+        return $this->genderCombination;
+    }
+
+    public function setGenderCombination(GenderCombinationEnum $genderCombination): static
+    {
+        $this->genderCombination = $genderCombination;
+
+        return $this;
     }
 }

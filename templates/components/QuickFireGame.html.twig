@@ -48,9 +48,20 @@
 
             {# Description #}
             {% if this.position.description %}
+                {% set pronoun1 = this.gender1 == 'f' ? 'elle' : 'il' %}
+                {% set pronoun2 = this.gender2 == 'f' ? 'elle' : 'il' %}
+                {% set agreement1 = this.gender1 == 'f' ? 'e' : '' %}
+                {% set agreement2 = this.gender2 == 'f' ? 'e' : '' %}
+                {% set joueurHomme = this.gender1 == 'm' ? this.player1 : this.player2 %}
+                {% set joueurFemme = this.gender1 == 'f' ? this.player1 : this.player2 %}
                 <div class="px-5 py-4 text-gray-600 text-sm leading-relaxed border-t border-gray-100">
                     {{ this.position.description
-                        |replace({'{joueur1}': this.player1, '{joueur2}': this.player2, '{e1}': '', '{e2}': 'e', '{il1}': 'il', '{il2}': 'elle'}) }}
+                        |replace({
+                            '{joueur1}': this.player1, '{joueur2}': this.player2,
+                            '{il1}': pronoun1, '{il2}': pronoun2,
+                            '{e1}': agreement1, '{e2}': agreement2,
+                            '{joueurHomme}': joueurHomme, '{joueurFemme}': joueurFemme,
+                        }) }}
                 </div>
             {% endif %}
 

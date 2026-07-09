@@ -16,7 +16,7 @@ class GameInitializer
     {
     }
 
-    public function quickFireGameInitialize(array $selectedAccessoryIds = []): Game
+    public function quickFireGameInitialize(array $selectedAccessoryIds = [], string $gender1 = 'm', string $gender2 = 'f'): Game
     {
         $game = new Game($this->positionRepository, $this->accessoriesRepository);
 
@@ -24,6 +24,7 @@ class GameInitializer
             ? $this->accessoriesRepository->findBy(['id' => $selectedAccessoryIds])
             : [];
         $game->setSelectedAccessories($selectedAccessories);
+        $game->setPlayerGenders($gender1, $gender2);
         $game->setIntensityQuota([
             IntensityEnum::WARMUP->value => 2,
             IntensityEnum::DESIRE->value => 3,

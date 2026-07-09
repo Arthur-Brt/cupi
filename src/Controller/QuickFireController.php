@@ -28,6 +28,8 @@ final class QuickFireController extends AbstractController
             $session->set('selected_accessories', $selectedIds);
             $session->set('player1', trim($request->request->getString('player1')) ?: 'Joueur 1');
             $session->set('player2', trim($request->request->getString('player2')) ?: 'Joueur 2');
+            $session->set('gender1', $request->request->getString('gender1') === 'f' ? 'f' : 'm');
+            $session->set('gender2', $request->request->getString('gender2') === 'm' ? 'm' : 'f');
             $session->remove('game');
             $session->remove('count');
 
@@ -42,6 +44,8 @@ final class QuickFireController extends AbstractController
             'selectedIds' => $selectedIds,
             'player1'     => $session->get('player1', ''),
             'player2'     => $session->get('player2', ''),
+            'gender1'     => $session->get('gender1', 'm'),
+            'gender2'     => $session->get('gender2', 'f'),
         ]);
     }
 

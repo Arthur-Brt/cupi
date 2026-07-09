@@ -4,6 +4,7 @@ namespace App\Controller\Admin;
 
 use App\Entity\Accessories;
 use App\Entity\Position;
+use App\Enum\GenderCombinationEnum;
 use Doctrine\ORM\EntityManagerInterface;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Crud;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
@@ -44,7 +45,9 @@ class PositionCrudController extends AbstractCrudController
     public function configureFields(string $pageName): iterable
     {
         $name = TextField::new('name');
-        $description = TextField::new('description');
+        $description = TextareaField::new('description')
+            ->setNumOfRows(5)
+            ->setHelp($this->buildPlaceholderHelp());
         $imageFile = TextareaField::new('imageFile', 'Image')
             ->setFormType(VichImageType::class)
             ->setRequired(false)
@@ -59,13 +62,21 @@ class PositionCrudController extends AbstractCrudController
         $duration = IntegerField::new('duration', 'Durée (secondes)')
             ->setHelp('Laisser vide pour utiliser la durée par défaut (60s)')
             ->setRequired(false);
+        $genderCombination = ChoiceField::new('genderCombination', 'Public concerné')
+            ->setChoices([
+                GenderCombinationEnum::ANY->label() => GenderCombinationEnum::ANY,
+                GenderCombinationEnum::HOMME_FEMME->label() => GenderCombinationEnum::HOMME_FEMME,
+                GenderCombinationEnum::HOMME_HOMME->label() => GenderCombinationEnum::HOMME_HOMME,
+                GenderCombinationEnum::FEMME_FEMME->label() => GenderCombinationEnum::FEMME_FEMME,
+            ])
+            ->setHelp('Restreint la position aux parties dont les joueurs correspondent à ce choix. "Un homme + une femme" débloque en plus les placeholders {joueurHomme}/{joueurFemme}.');
         $createdBy = TextField::new('createdBy', 'Créé par')->onlyOnDetail();
         $updatedBy = TextField::new('updatedBy', 'Modifié par')->onlyOnDetail();
 
         return match ($pageName) {
-                Crud::PAGE_INDEX => [$name, $imageDisplay, $intensity, $duration],
-                Crud::PAGE_DETAIL => [$name, $imageDisplay, $intensity, $duration, $createdBy, $updatedBy],
-                Crud::PAGE_NEW, Crud::PAGE_EDIT => [$name, $description, $imageFile, $accessories, $intensity, $duration],
+                Crud::PAGE_INDEX => [$name, $imageDisplay, $intensity, $genderCombination, $duration],
+                Crud::PAGE_DETAIL => [$name, $imageDisplay, $intensity, $genderCombination, $duration, $createdBy, $updatedBy],
+                Crud::PAGE_NEW, Crud::PAGE_EDIT => [$name, $description, $imageFile, $accessories, $intensity, $genderCombination, $duration],
         };
     }
 //    public function persistEntity(EntityManagerInterface $entityManager, $entityInstance): void
@@ -107,5 +118,40 @@ class PositionCrudController extends AbstractCrudController
 //        }
 //    }
 
+    private function buildPlaceholderHelp(): string
+    {
+        $placeholders = [
+            '{joueur1}' => 'prénom du joueur 1',
+            '{joueur2}' => 'prénom du joueur 2',
+            '{il1}' => '"il" / "elle" (joueur 1)',
+            '{il2}' => '"il" / "elle" (joueur 2)',
+            '{e1}' => 'accord joueur 1 (ex: "prêt{e1}")',
+            '{e2}' => 'accord joueur 2 (ex: "prêt{e2}")',
+            '{joueurHomme}' => 'prénom du joueur homme (uniquement si "Public concerné" = Un homme + une femme)',
+            '{joueurFemme}' => 'prénom du joueur femme (uniquement si "Public concerné" = Un homme + une femme)',
+        ];
 
+        $chips = '';
+        foreach (array_keys($placeholders) as $placeholder) {
+            $chips .= sprintf(
+                '<button type="button" class="placeholder-chip" data-action="placeholder-inserter#insert" data-placeholder="%1$s">%1$s</button>',
+                $placeholder
+            );
+        }
+
+        $legend = implode(' · ', array_map(
+            static fn (string $placeholder, string $label) => sprintf('%s → %s', $placeholder, $label),
+            array_keys($placeholders),
+            array_values($placeholders)
+        ));
+
+        return sprintf(
+            '<div data-controller="placeholder-inserter">'
+            .'<div class="placeholder-chips">%s</div>'
+            .'<div class="placeholder-legend">%s</div>'
+            .'</div>',
+            $chips,
+            $legend
+        );
+    }
 }

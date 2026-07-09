@@ -4,6 +4,7 @@ namespace App\Model;
 
 use App\Entity\Accessories;
 use App\Entity\Position;
+use App\Enum\GenderCombinationEnum;
 use App\Enum\IntensityEnum;
 use App\Repository\AccessoriesRepository;
 use App\Repository\PositionRepository;
@@ -12,6 +13,9 @@ class Game
 {
     /** @var int[] */
     private array $selectedAccessoryIds = [];
+
+    private string $gender1 = 'm';
+    private string $gender2 = 'f';
 
     /** @var array<IntensityEnum, int[]> */
     private array $positionIdsByIntensity = [];
@@ -43,6 +47,12 @@ class Game
         $this->intensityQuota = $quota;
     }
 
+    public function setPlayerGenders(string $gender1, string $gender2): void
+    {
+        $this->gender1 = $gender1;
+        $this->gender2 = $gender2;
+    }
+
     public function initialize(): void
     {
         $allPositions = $this->positionRepository->findAll();
@@ -51,7 +61,10 @@ class Game
             $intensity = $position->getIntensity();
             $accessories = $position->getAccessories()->map(fn($a) => $a->getId())->toArray();
 
-            if (count($accessories) === 0 || $this->accessoriesAreCompatible($accessories)) {
+            if (
+                (count($accessories) === 0 || $this->accessoriesAreCompatible($accessories))
+                && $this->genderCombinationIsCompatible($position->getGenderCombination())
+            ) {
                 $this->positionIdsByIntensity[$intensity->value][] = $position->getId();
             }
         }
@@ -137,5 +150,15 @@ class Game
     private function accessoriesAreCompatible(array $required): bool
     {
         return empty(array_diff($required, $this->selectedAccessoryIds));
+    }
+
+    private function genderCombinationIsCompatible(GenderCombinationEnum $required): bool
+    {
+        return match ($required) {
+            GenderCombinationEnum::ANY => true,
+            GenderCombinationEnum::HOMME_FEMME => $this->gender1 !== $this->gender2,
+            GenderCombinationEnum::HOMME_HOMME => 'm' === $this->gender1 && 'm' === $this->gender2,
+            GenderCombinationEnum::FEMME_FEMME => 'f' === $this->gender1 && 'f' === $this->gender2,
+        };
     }
 }
